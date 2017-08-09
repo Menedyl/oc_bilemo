@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Phone
@@ -20,6 +21,8 @@ class Phone
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
+     *
+     * @Serializer\Groups({"show"})
      */
     private $id;
 
@@ -27,6 +30,8 @@ class Phone
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
+     *
+     * @Serializer\Groups({"show"})
      */
     private $name;
 
@@ -34,6 +39,8 @@ class Phone
      * @var string
      *
      * @ORM\Column(name="description", type="text")
+     *
+     * @Serializer\Groups({"show"})
      */
     private $description;
 
@@ -41,6 +48,8 @@ class Phone
      * @var float
      *
      * @ORM\Column(name="price", type="float")
+     *
+     * @Serializer\Groups({"show"})
      */
     private $price;
 
@@ -48,6 +57,8 @@ class Phone
      * @var Collection
      *
      * @ORM\OneToMany(targetEntity="AppBundle\Entity\Picture", mappedBy="phone", cascade={"all"})
+     *
+     * @Serializer\Groups({"show"})
      */
     private $pictures;
 

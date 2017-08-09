@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation as Serializer;
 
 /**
  * Picture
@@ -25,6 +26,8 @@ class Picture
      * @var string
      *
      * @ORM\Column(name="url", type="string", length=255)
+     *
+     * @Serializer\Groups({"show"})
      */
     private $url;
 
@@ -32,6 +35,8 @@ class Picture
      * @var string
      *
      * @ORM\Column(name="alt", type="string", length=255)
+     *
+     * @Serializer\Groups({"show"})
      */
     private $alt;
 
