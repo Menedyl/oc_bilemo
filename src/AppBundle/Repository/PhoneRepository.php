@@ -25,8 +25,5 @@ class PhoneRepository extends EntityRepository
             ->getResult();
 
         return $qb;
-
     }
-
-
 }

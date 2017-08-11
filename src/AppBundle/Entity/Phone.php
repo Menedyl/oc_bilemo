@@ -2,8 +2,6 @@
 
 namespace AppBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -22,7 +20,7 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"show", "list"})
+     * @Serializer\Groups({"detail", "list"})
      */
     private $id;
 
@@ -31,7 +29,7 @@ class Phone
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      *
-     * @Serializer\Groups({"show", "list"})
+     * @Serializer\Groups({"detail", "list"})
      */
     private $name;
 
@@ -40,7 +38,7 @@ class Phone
      *
      * @ORM\Column(name="description", type="text")
      *
-     * @Serializer\Groups({"show"})
+     * @Serializer\Groups({"detail"})
      */
     private $description;
 
@@ -49,26 +47,19 @@ class Phone
      *
      * @ORM\Column(name="price", type="float")
      *
-     * @Serializer\Groups({"show", "list"})
+     * @Serializer\Groups({"detail", "list"})
      */
     private $price;
 
     /**
-     * @var Collection
+     * @var string
      *
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Picture", mappedBy="phone", cascade={"all"})
+     * @ORM\Column(name="picture", type="string", length=255)
      *
-     * @Serializer\Groups({"show"})
+     * @Serializer\Groups({"detail"})
      */
-    private $pictures;
+    private $picture;
 
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->pictures = new ArrayCollection();
-    }
 
     /**
      * Get id
@@ -141,32 +132,22 @@ class Phone
     }
 
     /**
-     * Add picture
+     * Get picture
      *
-     * @param Picture $picture
+     * @return string
      */
-    public function addPicture(Picture $picture)
+    public function getPicture()
     {
-        $this->pictures->add($picture);
+        return $this->picture;
     }
 
     /**
-     * Remove picture
+     * Set picture
      *
-     * @param Picture $picture
+     * @param string $picture
      */
-    public function removePicture(Picture $picture)
+    public function setPicture($picture)
     {
-        $this->pictures->removeElement($picture);
-    }
-
-    /**
-     * Get pictures
-     *
-     * @return Collection
-     */
-    public function getPictures()
-    {
-        return $this->pictures;
+        $this->picture = $picture;
     }
 }

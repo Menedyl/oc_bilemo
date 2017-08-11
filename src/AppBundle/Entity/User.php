@@ -20,7 +20,7 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"show"})
+     * @Serializer\Groups({"detail", "list"})
      */
     private $id;
 
@@ -29,7 +29,7 @@ class User
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      *
-     * @Serializer\Groups({"show"})
+     * @Serializer\Groups({"detail", "list"})
      */
     private $name;
 
@@ -45,7 +45,7 @@ class User
      *
      * @ORM\Column(name="mail", type="string", length=255, unique=true)
      *
-     * @Serializer\Groups({"show"})
+     * @Serializer\Groups({"detail"})
      */
     private $mail;
 
