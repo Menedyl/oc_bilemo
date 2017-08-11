@@ -22,7 +22,7 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"show"})
+     * @Serializer\Groups({"show", "list"})
      */
     private $id;
 
@@ -31,7 +31,7 @@ class Phone
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      *
-     * @Serializer\Groups({"show"})
+     * @Serializer\Groups({"show", "list"})
      */
     private $name;
 
@@ -49,7 +49,7 @@ class Phone
      *
      * @ORM\Column(name="price", type="float")
      *
-     * @Serializer\Groups({"show"})
+     * @Serializer\Groups({"show", "list"})
      */
     private $price;
 
