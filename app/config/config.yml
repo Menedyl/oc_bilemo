@@ -72,6 +72,8 @@ swiftmailer:
 fos_rest:
     body_converter:
         enabled: true
+        validate: true
+        validation_errors_argument: violations
     view:
         formats: { json: true, xml: false, rss: false }
         view_response_listener: true
@@ -86,3 +88,6 @@ fos_rest:
         enabled: true
     routing_loader:
         include_format: false
+
+sensio_framework_extra:
+    request: { converters: true }

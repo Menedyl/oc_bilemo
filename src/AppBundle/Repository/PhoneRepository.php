@@ -13,12 +13,20 @@ use Doctrine\ORM\EntityRepository;
 class PhoneRepository extends EntityRepository
 {
 
-    public function getList($limit, $order, $offset)
+    public function getList($limit, $order, $offset, $keyword)
     {
         $qb = $this
             ->createQueryBuilder('p')
             ->select('p')
-            ->orderBy('p.name', $order)
+            ->orderBy('p.name', $order);
+
+        if ($keyword) {
+            $qb = $qb
+                ->where('p.name LIKE :keyword')
+                ->setParameter('keyword', '%' . $keyword . '%');
+        }
+
+        $qb = $qb
             ->setFirstResult(($offset - 1) * $limit)
             ->setMaxResults($limit)
             ->getQuery()
