@@ -3,13 +3,12 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Form\Type\UserType;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Validator\ConstraintViolationList;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
+use Symfony\Component\HttpFoundation\Request;
 
 class UserController extends FOSRestController
 {
@@ -99,32 +98,33 @@ class UserController extends FOSRestController
      *     name="user_create"
      * )
      * @Rest\View(
-     *     statusCode=201
+     *     statusCode=201,
+     *     serializerGroups={"create"}
      * )
-     * @ParamConverter(
-     *     "user",
-     *     converter="fos_rest.request_body",
-     *     options={
-     *          "validator" = {"groups"="create"}
-     *     }
-     *)
      */
-    public function createAction(User $user, ConstraintViolationList $violations)
+    public function createAction(Request $request)
     {
-        if (count($violations)) {
-            return $this->view($violations, Response::HTTP_BAD_REQUEST);
+
+        $user = new User();
+        $form = $this->createForm(UserType::class, $user);
+
+        $form->submit($request->request->all());
+
+        if ($form->isValid()) {
+
+            $encoder = $this->get('security.password_encoder');
+            $encoded = $encoder->encodePassword($user, $user->getPlainPassword());
+            $user->setPassword($encoded);
+
+            $em = $this->getDoctrine()->getManager();
+
+            $em->persist($user);
+            $em->flush();
+
+            return $user;
         }
 
-        $em = $this->getDoctrine()->getManager();
-
-        $em->persist($user);
-        $em->flush();
-
-        return $this->view($user, Response::HTTP_CREATED,
-            ['Location' => $this->generateUrl(
-                'user_show',
-                ['id' => $user->getId(),
-                    UrlGeneratorInterface::ABSOLUTE_URL])]);
+        return $form;
 
     }
 }
