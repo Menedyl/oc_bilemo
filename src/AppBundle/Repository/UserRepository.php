@@ -34,4 +34,15 @@ class UserRepository extends EntityRepository
 
         return $qb;
     }
+
+    public function findOneByMail($mail)
+    {
+        return $this
+            ->createQueryBuilder('u')
+            ->select('u')
+            ->where('u.mail = :mail')
+            ->setParameter('mail', $mail)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
