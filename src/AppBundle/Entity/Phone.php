@@ -132,7 +132,7 @@ class Phone
     }
 
     /**
-     * Get picture
+     * Get pictureUrl
      *
      * @return string
      */
@@ -142,12 +142,12 @@ class Phone
     }
 
     /**
-     * Set picture
+     * Set pictureUrl
      *
-     * @param string $picture
+     * @param string $pictureUrl
      */
-    public function setPictureUrl($picture)
+    public function setPictureUrl($pictureUrl)
     {
-        $this->pictureUrl = $picture;
+        $this->pictureUrl = $pictureUrl;
     }
 }
