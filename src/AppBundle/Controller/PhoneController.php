@@ -18,7 +18,7 @@ class PhoneController extends Controller
      * )
      * @Rest\View(
      *     statusCode=200,
-     *     serializerGroups={"detail"}
+     *     serializerGroups={"details"}
      * )
      */
     public function showAction(Phone $phone)

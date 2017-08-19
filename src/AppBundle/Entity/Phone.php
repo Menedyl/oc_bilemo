@@ -20,7 +20,7 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"detail", "list"})
+     * @Serializer\Groups({"details", "list"})
      */
     private $id;
 
@@ -29,7 +29,7 @@ class Phone
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      *
-     * @Serializer\Groups({"detail", "list"})
+     * @Serializer\Groups({"details", "list"})
      */
     private $name;
 
@@ -38,7 +38,7 @@ class Phone
      *
      * @ORM\Column(name="description", type="text")
      *
-     * @Serializer\Groups({"detail"})
+     * @Serializer\Groups({"details"})
      */
     private $description;
 
@@ -47,18 +47,18 @@ class Phone
      *
      * @ORM\Column(name="price", type="float")
      *
-     * @Serializer\Groups({"detail", "list"})
+     * @Serializer\Groups({"details", "list"})
      */
     private $price;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="picture", type="string", length=255)
+     * @ORM\Column(name="picture_url", type="string", length=255)
      *
-     * @Serializer\Groups({"detail"})
+     * @Serializer\Groups({"details"})
      */
-    private $picture;
+    private $pictureUrl;
 
 
     /**
@@ -136,9 +136,9 @@ class Phone
      *
      * @return string
      */
-    public function getPicture()
+    public function getPictureUrl()
     {
-        return $this->picture;
+        return $this->pictureUrl;
     }
 
     /**
@@ -146,8 +146,8 @@ class Phone
      *
      * @param string $picture
      */
-    public function setPicture($picture)
+    public function setPictureUrl($picture)
     {
-        $this->picture = $picture;
+        $this->pictureUrl = $picture;
     }
 }
