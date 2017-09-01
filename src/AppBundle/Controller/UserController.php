@@ -7,8 +7,8 @@ use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 class UserController extends FOSRestController
@@ -22,7 +22,7 @@ class UserController extends FOSRestController
      * )
      * @Rest\View(
      *     statusCode=200,
-     *     serializerGroups={"detail"}
+     *     serializerGroups={"details"}
      * )
      */
     public function showAction(User $user)
@@ -99,7 +99,8 @@ class UserController extends FOSRestController
      *     name="user_create"
      * )
      * @Rest\View(
-     *     statusCode=201
+     *     statusCode=201,
+     *     serializerGroups={"create"}
      * )
      * @ParamConverter(
      *     "user",
@@ -109,22 +110,30 @@ class UserController extends FOSRestController
      *     }
      *)
      */
-    public function createAction(User $user, ConstraintViolationList $violations)
+    public function createAction(User $user, ConstraintViolationList $violations, Request $request)
     {
         if (count($violations)) {
             return $this->view($violations, Response::HTTP_BAD_REQUEST);
         }
 
-        $em = $this->getDoctrine()->getManager();
+        $user->setPassword($this->get('security.password_encoder')->encodePassword($user, $user->getPassword()));
 
-        $em->persist($user);
-        $em->flush();
+        $client = $this
+            ->get('app_bundle.client_manager')
+            ->createClient($this->getParameter('redirect_uri'));
 
-        return $this->view($user, Response::HTTP_CREATED,
-            ['Location' => $this->generateUrl(
-                'user_show',
-                ['id' => $user->getId(),
-                    UrlGeneratorInterface::ABSOLUTE_URL])]);
+        $authCode = $this
+            ->get('app_bundle.authorization_code_manager')
+            ->getAuthorizationCode($client, $user, $request, $this->getParameter('redirect_uri'));
 
+        $accessToken = $this
+            ->get('app_bundle.access_token_manager')
+            ->getTokenAccess($authCode, $request, $client, $this->getParameter('redirect_uri'));
+
+        return [
+            'data' => $user,
+            '_links' => $this->generateUrl('user_show', ['id' => $user->getId()]),
+            '_embedded' => $accessToken
+        ];
     }
 }

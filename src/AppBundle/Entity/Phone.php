@@ -20,7 +20,7 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"detail", "list"})
+     * @Serializer\Groups({"details", "list"})
      */
     private $id;
 
@@ -29,7 +29,7 @@ class Phone
      *
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      *
-     * @Serializer\Groups({"detail", "list"})
+     * @Serializer\Groups({"details", "list"})
      */
     private $name;
 
@@ -38,7 +38,7 @@ class Phone
      *
      * @ORM\Column(name="description", type="text")
      *
-     * @Serializer\Groups({"detail"})
+     * @Serializer\Groups({"details"})
      */
     private $description;
 
@@ -47,7 +47,7 @@ class Phone
      *
      * @ORM\Column(name="price", type="float")
      *
-     * @Serializer\Groups({"detail", "list"})
+     * @Serializer\Groups({"details", "list"})
      */
     private $price;
 
@@ -56,7 +56,7 @@ class Phone
      *
      * @ORM\Column(name="picture", type="string", length=255)
      *
-     * @Serializer\Groups({"detail"})
+     * @Serializer\Groups({"details"})
      */
     private $picture;
 

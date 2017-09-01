@@ -4,6 +4,7 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -12,7 +13,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
  */
-class User
+class User implements UserInterface
 {
     /**
      * @var int
@@ -21,16 +22,16 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"detail", "list"})
+     * @Serializer\Groups({"details", "list", "create"})
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @ORM\Column(name="name", type="string", length=255)
      *
-     * @Serializer\Groups({"detail", "list"})
+     * @Serializer\Groups({"details", "list", "create"})
      *
      * @Assert\NotBlank(
      *     groups={"create"}
@@ -52,9 +53,9 @@ class User
     /**
      * @var string
      *
-     * @ORM\Column(name="mail", type="string", length=255, unique=true)
+     * @ORM\Column(name="mail", type="string", length=255)
      *
-     * @Serializer\Groups({"detail"})
+     * @Serializer\Groups({"details", "create"})
      * @Assert\NotBlank(
      *     groups={"create"}
      * )
@@ -133,6 +134,23 @@ class User
     public function setMail($mail)
     {
         $this->mail = $mail;
+    }
+
+    public function getUsername()
+    {
+        return $this->mail;
+    }
+
+    public function getSalt()
+    {
+    }
+
+    public function getRoles()
+    {
+    }
+
+    public function eraseCredentials()
+    {
     }
 }
 
