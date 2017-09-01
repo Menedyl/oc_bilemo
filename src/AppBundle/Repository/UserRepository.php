@@ -13,12 +13,20 @@ use Doctrine\ORM\EntityRepository;
 class UserRepository extends EntityRepository
 {
 
-    public function getList($limit, $offset, $order)
+    public function getList($limit, $offset, $order, $keyword)
     {
         $qb = $this
             ->createQueryBuilder('u')
             ->select('u')
-            ->orderBy('u.name', $order)
+            ->orderBy('u.name', $order);
+
+        if ($keyword) {
+            $qb = $qb
+                ->where('u.name LIKE :keyword')
+                ->setParameter('keyword', '%' . $keyword . '%');
+        }
+
+        $qb = $qb
             ->setFirstResult(($offset - 1) * $limit)
             ->setMaxResults($limit)
             ->getQuery()

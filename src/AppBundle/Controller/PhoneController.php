@@ -50,6 +50,12 @@ class PhoneController extends Controller
      *     default="asc",
      *     description="Sort order (asc or desc)."
      * )
+     * @Rest\QueryParam(
+     *     name="keyword",
+     *     requirements="\w+",
+     *     nullable=true,
+     *     description="Search query to look for users."
+     * )
      * @Rest\View(
      *     statusCode=200,
      *     serializerGroups={"list"}
@@ -60,7 +66,9 @@ class PhoneController extends Controller
         $phones = $this->getDoctrine()->getRepository('AppBundle:Phone')->getList(
             $paramFetcher->get('limit'),
             $paramFetcher->get('order'),
-            $paramFetcher->get('offset')
+            $paramFetcher->get('offset'),
+            $paramFetcher->get('keyword')
+
         );
 
         $currentPhones = count($phones);
@@ -77,8 +85,6 @@ class PhoneController extends Controller
                 'total_pages' => $totalPages
             ]];
 
-
         return $pagerPhones;
     }
-
 }
