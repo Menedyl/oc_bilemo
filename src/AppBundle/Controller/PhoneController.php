@@ -18,7 +18,7 @@ class PhoneController extends Controller
      * )
      * @Rest\View(
      *     statusCode=200,
-     *     serializerGroups={"show"}
+     *     serializerGroups={"details"}
      * )
      */
     public function showAction(Phone $phone)
@@ -35,7 +35,7 @@ class PhoneController extends Controller
      * @Rest\QueryParam(
      *     name="limit",
      *     requirements="\d+",
-     *     default="2",
+     *     default="20",
      *     description="Max number of phones per page."
      * )
      * @Rest\QueryParam(
@@ -49,12 +49,6 @@ class PhoneController extends Controller
      *     requirements="asc|desc",
      *     default="asc",
      *     description="Sort order (asc or desc)."
-     * )
-     * @Rest\QueryParam(
-     *     name="keyword",
-     *     requirements="[a-zA-Z0-9]",
-     *     nullable=true,
-     *     description=""
      * )
      * @Rest\View(
      *     statusCode=200,
@@ -73,15 +67,15 @@ class PhoneController extends Controller
         $totalPhones = count($this->getDoctrine()->getRepository('AppBundle:Phone')->findAll());
         $totalPages = ceil($totalPhones / $paramFetcher->get('limit'));
 
-        $pagerPhones = array(
+        $pagerPhones = [
             'data' => $phones,
-            'meta' => array(
-                'limit_items' => $paramFetcher->get('limit'),
+            'meta' => [
+                'limit_items' => (int)$paramFetcher->get('limit'),
                 'current_items' => $currentPhones,
                 'total_items' => $totalPhones,
-                'current_page' => $paramFetcher->get('offset'),
+                'current_page' => (int)$paramFetcher->get('offset'),
                 'total_pages' => $totalPages
-            ));
+            ]];
 
 
         return $pagerPhones;
