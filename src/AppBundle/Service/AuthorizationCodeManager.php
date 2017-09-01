@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\Client;
 use OAuth2\OAuth2;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -15,7 +16,7 @@ class AuthorizationCodeManager
         $this->Oauth2 = $OAuth2;
     }
 
-    public function getAuthorizationCode($client, $data, Request $request, $redirectUri)
+    public function getAuthorizationCode(Client $client, $data, Request $request, $redirectUri)
     {
         $request->query->add([
             'client_id' => $client->getPublicId(),

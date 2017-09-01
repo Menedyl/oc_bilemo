@@ -2,6 +2,7 @@
 
 namespace AppBundle\Service;
 
+use AppBundle\Entity\Client;
 use JMS\Serializer\Serializer;
 use OAuth2\OAuth2;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,7 @@ class AccessTokenManager
         $this->serializer = $serializer;
     }
 
-    public function getTokenAccess($authCode, Request $request, $client, $redirectUri)
+    public function getTokenAccess($authCode, Request $request, Client $client, $redirectUri)
     {
         $request->request->add([
             'grant_type' => 'authorization_code',
