@@ -39,3 +39,13 @@ services:
 
     AppBundle\EventSubscriber\ExceptionSubscriber:
         tags: [kernel.event_subscriber]
+
+    AppBundle\Service\Representation\Phones:
+        public: true
+        arguments:
+            $em: '@Doctrine\ORM\EntityManagerInterface'
+
+    AppBundle\Service\Representation\Users:
+        public: true
+        arguments:
+            $em: '@Doctrine\ORM\EntityManagerInterface'

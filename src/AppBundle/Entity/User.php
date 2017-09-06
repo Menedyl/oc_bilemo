@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -11,9 +12,19 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ *
+ * @Hateoas\Relation(
+ *     "self",
+ *     href = @Hateoas\Route(
+ *          "user_show",
+ *          parameters = {"id" = "expr(object.getId())"},
+ *          absolute=true
+ *     )
+ * )
  */
 class User
 {
+
     /**
      * @var int
      *
@@ -21,7 +32,7 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"details", "list"})
+     * @Serializer\Groups({"details"})
      */
     private $id;
 
@@ -43,6 +54,8 @@ class User
      *
      * @ORM\Column(name="password", type="string", length=255)
      *
+     * @Serializer\Groups({"private"})
+     *
      * @Assert\NotBlank(
      *     groups={"create"}
      * )
@@ -54,7 +67,8 @@ class User
      *
      * @ORM\Column(name="mail", type="string", length=255, unique=true)
      *
-     * @Serializer\Groups({"details"})
+     * @Serializer\Groups({"details", "list"})
+     *
      * @Assert\NotBlank(
      *     groups={"create"}
      * )
@@ -135,4 +149,3 @@ class User
         $this->mail = $mail;
     }
 }
-
