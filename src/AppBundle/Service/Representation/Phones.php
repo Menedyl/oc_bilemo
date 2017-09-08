@@ -2,31 +2,24 @@
 
 namespace AppBundle\Service\Representation;
 
-
-use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Hateoas\Representation\CollectionRepresentation;
 use Hateoas\Representation\PaginatedRepresentation;
 
-class Phones
+class Phones extends AbstractRepresentation
 {
-    private $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
+    const TYPE = 'phones';
 
     public function pagination($phones, ParamFetcherInterface $paramFetcher)
     {
-        $totalPhones = count($this->em->getRepository('AppBundle:Phone')->findAll());
+        $totalPhones = count($this->customRepository->findAll());
         $totalPages = ceil($totalPhones / $paramFetcher->get('limit'));
 
         $representationPhones =
             new PaginatedRepresentation(
                 new CollectionRepresentation(
                     $phones,
-                    'phones'
+                    self::TYPE
                 ),
                 'phones_list',
                 [],
@@ -39,7 +32,7 @@ class Phones
                 $totalPhones
             );
 
-        return $representationPhones;
+        return $this->makeLayout($representationPhones, self::TYPE);
     }
 
 }

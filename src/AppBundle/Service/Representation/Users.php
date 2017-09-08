@@ -3,30 +3,25 @@
 namespace AppBundle\Service\Representation;
 
 
-use Doctrine\ORM\EntityManagerInterface;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Hateoas\Representation\CollectionRepresentation;
 use Hateoas\Representation\PaginatedRepresentation;
 
-class Users
+class Users extends AbstractRepresentation
 {
-    private $em;
+    const TYPE = 'users';
 
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
 
     public function paginate($users, ParamFetcherInterface $paramFetcher)
     {
-        $totalUsers = count($this->em->getRepository('AppBundle:User')->findAll());
+        $totalUsers = count($this->customRepository->findAll());
         $totalPages = ceil($totalUsers / $paramFetcher->get('limit'));
 
         $representationUsers =
             new PaginatedRepresentation(
                 new CollectionRepresentation(
                     $users,
-                    'users'
+                    self::TYPE
                 ),
                 'users_list',
                 [],
@@ -39,7 +34,8 @@ class Users
                 $totalUsers
             );
 
-        return $representationUsers;
+        return $this->makeLayout($representationUsers, self::TYPE);
     }
+
 
 }
