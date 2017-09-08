@@ -93,6 +93,5 @@ fos_rest:
         codes:
             { AppBundle\Exception\ResourceValidationException: 400 , AppBundle\Exception\ResourceNotFoundException: 404}
 
-
 sensio_framework_extra:
     request: { converters: true }
