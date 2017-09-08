@@ -6,7 +6,7 @@ imports:
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    locale: fr
+    locale: en
 
 framework:
     #esi: ~
@@ -93,7 +93,7 @@ fos_rest:
     exception:
         enabled: true
         codes:
-            { AppBundle\Exception\ResourceValidationException: 400 , AppBundle\Exception\ResourceNotFoundException: 404}
+            { AppBundle\Exception\ResourceValidationException: 400, AppBundle\Exception\ResourceNotFoundException: 404, AppBundle\Exception\ResourceUniqueConstraintValidationException: 409}
     versioning:
         enabled: true
         resolvers:
@@ -103,3 +103,6 @@ fos_rest:
 
 sensio_framework_extra:
     request: { converters: true }
+
+# NelmioApiDoc Configuration
+nelmio_api_doc: ~

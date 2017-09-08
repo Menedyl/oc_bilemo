@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\Phone;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class PhoneController extends Controller
@@ -14,11 +15,28 @@ class PhoneController extends Controller
      * @Rest\Get(
      *     path="/phones/{id}",
      *     name="phone_show",
-     *     requirements={"id" = "\d+"}
+     *     requirements={"id" = "\d+"},
      * )
      * @Rest\View(
      *     statusCode=200,
      *     serializerGroups={"details", "Default"}
+     * )
+     * @ApiDoc(
+     *     resource=true,
+     *     description="Get one phone",
+     *     section="Phones",
+     *     statusCodes={
+     *          200="Returned when find phone",
+     *          404="Returned when not found phone"
+     *      },
+     *     requirements={
+     *         {
+     *              "name"="id",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="The phone unique identifier."
+     *          }
+     *     }
      * )
      */
     public function showAction(Phone $phone)
@@ -59,6 +77,14 @@ class PhoneController extends Controller
      * @Rest\View(
      *     statusCode=200,
      *     serializerGroups={"list", "Default"}
+     * )
+     * @ApiDoc(
+     *     resource=true,
+     *     description="Get the list of all phones",
+     *     section="Phones",
+     *     statusCodes={
+     *          200="Returned when find list of all phones"
+     *      }
      * )
      */
     public function listAction(ParamFetcherInterface $paramFetcher)
