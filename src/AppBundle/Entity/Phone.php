@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Hateoas\Configuration\Annotation as Hateoas;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -10,6 +11,15 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @ORM\Table(name="phone")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PhoneRepository")
+ *
+ * @Hateoas\Relation(
+ *     "self",
+ *     href = @Hateoas\Route(
+ *          "phone_show",
+ *          parameters = {"id" = "expr(object.getId())"},
+ *          absolute=true
+ *     )
+ * )
  */
 class Phone
 {
@@ -20,7 +30,7 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"details", "list"})
+     * @Serializer\Groups({"details"})
      */
     private $id;
 

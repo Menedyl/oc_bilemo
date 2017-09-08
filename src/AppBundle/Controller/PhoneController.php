@@ -18,7 +18,7 @@ class PhoneController extends Controller
      * )
      * @Rest\View(
      *     statusCode=200,
-     *     serializerGroups={"details"}
+     *     serializerGroups={"details", "Default"}
      * )
      */
     public function showAction(Phone $phone)
@@ -58,7 +58,7 @@ class PhoneController extends Controller
      * )
      * @Rest\View(
      *     statusCode=200,
-     *     serializerGroups={"list"}
+     *     serializerGroups={"list", "Default"}
      * )
      */
     public function listAction(ParamFetcherInterface $paramFetcher)
@@ -68,23 +68,8 @@ class PhoneController extends Controller
             $paramFetcher->get('order'),
             $paramFetcher->get('offset'),
             $paramFetcher->get('keyword')
-
         );
 
-        $currentPhones = count($phones);
-        $totalPhones = count($this->getDoctrine()->getRepository('AppBundle:Phone')->findAll());
-        $totalPages = ceil($totalPhones / $paramFetcher->get('limit'));
-
-        $pagerPhones = [
-            'data' => $phones,
-            'meta' => [
-                'limit_items' => (int)$paramFetcher->get('limit'),
-                'current_items' => $currentPhones,
-                'total_items' => $totalPhones,
-                'current_page' => (int)$paramFetcher->get('offset'),
-                'total_pages' => $totalPages
-            ]];
-
-        return $pagerPhones;
+        return $this->get('AppBundle\Service\Representation\Phones')->pagination($phones, $paramFetcher);
     }
 }

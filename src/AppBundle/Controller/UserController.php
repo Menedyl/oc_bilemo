@@ -22,19 +22,19 @@ class UserController extends FOSRestController
      * )
      * @Rest\View(
      *     statusCode=200,
-     *     serializerGroups={"details"}
+     *     serializerGroups={"details", "Default"}
      * )
      */
     public function showAction(User $user)
     {
-            return $user;
+        return $user;
     }
 
 
     /**
      * @Rest\Get(
      *     path="/users",
-     *     name="user_list"
+     *     name="users_list"
      * )
      * @Rest\QueryParam(
      *     name="limit",
@@ -62,12 +62,11 @@ class UserController extends FOSRestController
      * )
      * @Rest\View(
      *     statusCode=200,
-     *     serializerGroups={"list"}
+     *     serializerGroups={"list", "Default"}
      * )
      */
     public function listAction(ParamFetcherInterface $paramFetcher)
     {
-
         $users = $this->getDoctrine()->getRepository('AppBundle:User')->getList(
             $paramFetcher->get('limit'),
             $paramFetcher->get('offset'),
@@ -75,21 +74,7 @@ class UserController extends FOSRestController
             $paramFetcher->get('keyword')
         );
 
-        $currentUsers = count($users);
-        $totalUsers = count($this->getDoctrine()->getRepository('AppBundle:User')->findAll());
-        $totalPages = ceil($totalUsers / $paramFetcher->get('limit'));
-
-        $pagerUsers = [
-            'data' => $users,
-            'meta' => [
-                'limit_items' => (int)$paramFetcher->get('limit'),
-                'current_items' => $currentUsers,
-                'total_items' => $totalUsers,
-                'current_page' => (int)$paramFetcher->get('offset'),
-                'total_pages' => $totalPages
-            ]];
-
-        return $pagerUsers;
+        return $this->get('AppBundle\Service\Representation\Users')->paginate($users, $paramFetcher);
     }
 
 
