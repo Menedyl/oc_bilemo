@@ -7,7 +7,7 @@ use Symfony\Component\Validator\ConstraintViolationList;
 
 class ExceptionManagement
 {
-    public function resourceValidation(ConstraintViolationList $violationList)
+    public function resourceValidationException(ConstraintViolationList $violationList)
     {
 
         $message = 'The JSON sent contains invalid data. ';
