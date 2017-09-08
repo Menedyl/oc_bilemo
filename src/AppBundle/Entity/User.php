@@ -33,6 +33,8 @@ class User
      * @ORM\GeneratedValue(strategy="AUTO")
      *
      * @Serializer\Groups({"details"})
+     *
+     * @Serializer\Since("1.0")
      */
     private $id;
 
@@ -46,6 +48,8 @@ class User
      * @Assert\NotBlank(
      *     groups={"create"}
      * )
+     *
+     * @Serializer\Since("1.0")
      */
     private $name;
 
@@ -59,6 +63,8 @@ class User
      * @Assert\NotBlank(
      *     groups={"create"}
      * )
+     *
+     * @Serializer\Since("1.0")
      */
     private $password;
 
@@ -75,6 +81,8 @@ class User
      * @Assert\Email(
      *     groups={"create"}
      * )
+     *
+     * @Serializer\Since("1.0")
      */
     private $mail;
 

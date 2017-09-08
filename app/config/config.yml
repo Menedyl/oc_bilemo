@@ -77,11 +77,13 @@ fos_rest:
     view:
         formats: { json: true, xml: false, rss: false }
         view_response_listener: true
+        mime_types:
+            json: ['application/json', 'application/json;version=1.0', 'application/json;version=2.0']
     serializer:
         serialize_null: true
     format_listener:
         rules:
-            - { path: '^/', priorities: ['json'], fallback_format: 'json' }
+            - { path: '^/', priorities: ['json', 'html'], fallback_format: 'json' }
     body_listener:
         enabled: true
     param_fetcher_listener:
@@ -92,6 +94,12 @@ fos_rest:
         enabled: true
         codes:
             { AppBundle\Exception\ResourceValidationException: 400 , AppBundle\Exception\ResourceNotFoundException: 404}
+    versioning:
+        enabled: true
+        resolvers:
+            media_type: # Accept header
+                enabled: true
+                regex: '/(v|version)=(?<version>[0-9\.]+)/'
 
 sensio_framework_extra:
     request: { converters: true }
