@@ -88,6 +88,10 @@ fos_rest:
         enabled: true
     routing_loader:
         include_format: false
+    exception:
+        enabled: true
+        codes:
+            { AppBundle\Exception\ResourceValidationException: 400 , AppBundle\Exception\ResourceNotFoundException: 404}
 
 sensio_framework_extra:
     request: { converters: true }

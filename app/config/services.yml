@@ -33,3 +33,9 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    AppBundle\Service\ExceptionManagement:
+        public: true
+
+    AppBundle\EventSubscriber\ExceptionSubscriber:
+        tags: [kernel.event_subscriber]

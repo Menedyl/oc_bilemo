@@ -27,7 +27,7 @@ class UserController extends FOSRestController
      */
     public function showAction(User $user)
     {
-        return $user;
+            return $user;
     }
 
 
@@ -112,7 +112,7 @@ class UserController extends FOSRestController
     public function createAction(User $user, ConstraintViolationList $violations)
     {
         if (count($violations)) {
-            return $this->view($violations, Response::HTTP_BAD_REQUEST);
+            $this->get('AppBundle\Service\ExceptionManagement')->resourceValidation($violations);
         }
 
         $em = $this->getDoctrine()->getManager();

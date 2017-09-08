@@ -21,16 +21,16 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"detail", "list"})
+     * @Serializer\Groups({"details", "list"})
      */
     private $id;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="name", type="string", length=255, unique=true)
+     * @ORM\Column(name="name", type="string", length=255)
      *
-     * @Serializer\Groups({"detail", "list"})
+     * @Serializer\Groups({"details", "list"})
      *
      * @Assert\NotBlank(
      *     groups={"create"}
@@ -54,7 +54,7 @@ class User
      *
      * @ORM\Column(name="mail", type="string", length=255, unique=true)
      *
-     * @Serializer\Groups({"detail"})
+     * @Serializer\Groups({"details"})
      * @Assert\NotBlank(
      *     groups={"create"}
      * )
