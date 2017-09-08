@@ -3,8 +3,8 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer;
-use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -12,9 +12,19 @@ use Symfony\Component\Validator\Constraints as Assert;
  *
  * @ORM\Table(name="user")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\UserRepository")
+ *
+ * @Hateoas\Relation(
+ *     "self",
+ *     href = @Hateoas\Route(
+ *          "user_show",
+ *          parameters = {"id" = "expr(object.getId())"},
+ *          absolute=true
+ *     )
+ * )
  */
-class User implements UserInterface
+class User
 {
+
     /**
      * @var int
      *
@@ -22,7 +32,9 @@ class User implements UserInterface
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"details", "list", "create"})
+     * @Serializer\Groups({"details"})
+     *
+     * @Serializer\Since("1.0")
      */
     private $id;
 
@@ -31,11 +43,13 @@ class User implements UserInterface
      *
      * @ORM\Column(name="name", type="string", length=255)
      *
-     * @Serializer\Groups({"details", "list", "create"})
+     * @Serializer\Groups({"details", "list"})
      *
      * @Assert\NotBlank(
      *     groups={"create"}
      * )
+     *
+     * @Serializer\Since("1.0")
      */
     private $name;
 
@@ -44,24 +58,31 @@ class User implements UserInterface
      *
      * @ORM\Column(name="password", type="string", length=255)
      *
+     * @Serializer\Groups({"private"})
+     *
      * @Assert\NotBlank(
      *     groups={"create"}
      * )
+     *
+     * @Serializer\Since("1.0")
      */
     private $password;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mail", type="string", length=255)
+     * @ORM\Column(name="mail", type="string", length=255, unique=true)
      *
-     * @Serializer\Groups({"details", "create"})
+     * @Serializer\Groups({"details", "list"})
+     *
      * @Assert\NotBlank(
      *     groups={"create"}
      * )
      * @Assert\Email(
      *     groups={"create"}
      * )
+     *
+     * @Serializer\Since("1.0")
      */
     private $mail;
 
@@ -135,23 +156,4 @@ class User implements UserInterface
     {
         $this->mail = $mail;
     }
-
-    public function getUsername()
-    {
-        return $this->mail;
-    }
-
-    public function getSalt()
-    {
-    }
-
-    public function getRoles()
-    {
-        return ['USER_ROLE'];
-    }
-
-    public function eraseCredentials()
-    {
-    }
 }
-

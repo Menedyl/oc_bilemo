@@ -6,9 +6,10 @@ use AppBundle\Entity\User;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
+use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 class UserController extends FOSRestController
@@ -22,7 +23,24 @@ class UserController extends FOSRestController
      * )
      * @Rest\View(
      *     statusCode=200,
-     *     serializerGroups={"details"}
+     *     serializerGroups={"details", "Default"}
+     * )
+     * @ApiDoc(
+     *     resource=true,
+     *     description="Get one user",
+     *     section="Users",
+     *     statusCodes={
+     *          200="Returned when find user",
+     *          404="Returned when not found user"
+     *      },
+     *     requirements={
+     *         {
+     *              "name"="id",
+     *              "dataType"="integer",
+     *              "requirement"="\d+",
+     *              "description"="The user unique identifier."
+     *          }
+     *     }
      * )
      */
     public function showAction(User $user)
@@ -62,7 +80,15 @@ class UserController extends FOSRestController
      * )
      * @Rest\View(
      *     statusCode=200,
-     *     serializerGroups={"list"}
+     *     serializerGroups={"list", "Default"}
+     * )
+     * @ApiDoc(
+     *     resource=true,
+     *     description="Get the list of all users",
+     *     section="Users",
+     *     statusCodes={
+     *          200="Returned when find list of all users",
+     *      }
      * )
      */
     public function listAction(ParamFetcherInterface $paramFetcher)
@@ -75,21 +101,7 @@ class UserController extends FOSRestController
             $paramFetcher->get('keyword')
         );
 
-        $currentUsers = count($users);
-        $totalUsers = count($this->getDoctrine()->getRepository('AppBundle:User')->findAll());
-        $totalPages = ceil($totalUsers / $paramFetcher->get('limit'));
-
-        $pagerUsers = [
-            'data' => $users,
-            'meta' => [
-                'limit_items' => (int)$paramFetcher->get('limit'),
-                'current_items' => $currentUsers,
-                'total_items' => $totalUsers,
-                'current_page' => (int)$paramFetcher->get('offset'),
-                'total_pages' => $totalPages
-            ]];
-
-        return $pagerUsers;
+        return $this->get('AppBundle\Service\Representation\Users')->paginate($users, $paramFetcher);
     }
 
 
@@ -99,8 +111,7 @@ class UserController extends FOSRestController
      *     name="user_create"
      * )
      * @Rest\View(
-     *     statusCode=201,
-     *     serializerGroups={"create"}
+     *     statusCode=201
      * )
      * @ParamConverter(
      *     "user",
@@ -109,11 +120,39 @@ class UserController extends FOSRestController
      *          "validator" = {"groups"="create"}
      *     }
      *)
+     * @ApiDoc(
+     *     resource=true,
+     *     description="create one user",
+     *     section="Users",
+     *     statusCodes={
+     *          201="Returned when create user",
+     *          400="Returned when a field is invalid",
+     *          409="Returned when unique constraint violation"
+     *
+     *      },
+     *     requirements={
+     *         {
+     *              "name"="name",
+     *              "dataType"="string",
+     *              "description"="The name of user."
+     *          },
+     *          {
+     *              "name"="password",
+     *              "dataType"="string",
+     *              "description"="The password of user."
+     *          },
+     *         {
+     *              "name"="mail",
+     *              "dataType"="string",
+     *              "description"="The mail of user."
+     *          }
+     *     }
+     * )
      */
-    public function createAction(User $user, ConstraintViolationList $violations, Request $request)
+    public function createAction(User $user, ConstraintViolationList $violations)
     {
         if (count($violations)) {
-            return $this->view($violations, Response::HTTP_BAD_REQUEST);
+            $this->get('AppBundle\Service\ExceptionManagement')->resourceValidationException($violations);
         }
 
         $user->setPassword($this->get('security.password_encoder')->encodePassword($user, $user->getPassword()));

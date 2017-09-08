@@ -1,3 +1,5 @@
+# Learn more about services, parameters and containers at
+# https://symfony.com/doc/current/service_container.html
 parameters:
     #parameter_name: value
 
@@ -31,6 +33,22 @@ services:
     # AppBundle\Service\ExampleService:
     #     arguments:
     #         $someArgument: 'some_value'
+
+    AppBundle\Service\ExceptionManagement:
+        public: true
+
+    AppBundle\EventSubscriber\ExceptionSubscriber:
+        tags: [kernel.event_subscriber]
+
+    AppBundle\Service\Representation\Phones:
+        public: true
+        arguments:
+            $em: '@Doctrine\ORM\EntityManagerInterface'
+
+    AppBundle\Service\Representation\Users:
+        public: true
+        arguments:
+            $em: '@Doctrine\ORM\EntityManagerInterface'
 
     app_bundle.user_authenticator:
         class: AppBundle\Security\UserAuthenticator

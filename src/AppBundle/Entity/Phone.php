@@ -2,6 +2,7 @@
 
 namespace AppBundle\Entity;
 
+use Hateoas\Configuration\Annotation as Hateoas;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation as Serializer;
 
@@ -10,6 +11,15 @@ use JMS\Serializer\Annotation as Serializer;
  *
  * @ORM\Table(name="phone")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\PhoneRepository")
+ *
+ * @Hateoas\Relation(
+ *     "self",
+ *     href = @Hateoas\Route(
+ *          "phone_show",
+ *          parameters = {"id" = "expr(object.getId())"},
+ *          absolute=true
+ *     )
+ * )
  */
 class Phone
 {
@@ -20,7 +30,9 @@ class Phone
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"details", "list"})
+     * @Serializer\Groups({"details"})
+     *
+     * @Serializer\Since("1.0")
      */
     private $id;
 
@@ -30,6 +42,8 @@ class Phone
      * @ORM\Column(name="name", type="string", length=255, unique=true)
      *
      * @Serializer\Groups({"details", "list"})
+     *
+     * @Serializer\Since("1.0")
      */
     private $name;
 
@@ -39,6 +53,8 @@ class Phone
      * @ORM\Column(name="description", type="text")
      *
      * @Serializer\Groups({"details"})
+     *
+     * @Serializer\Since("1.0")
      */
     private $description;
 
@@ -48,17 +64,22 @@ class Phone
      * @ORM\Column(name="price", type="float")
      *
      * @Serializer\Groups({"details", "list"})
+     *
+     * @Serializer\Since("1.0")
      */
     private $price;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="picture", type="string", length=255)
+     * @ORM\Column(name="picture_url", type="string", length=255)
      *
      * @Serializer\Groups({"details"})
+     *
+     * @Serializer\Since("1.0")
      */
-    private $picture;
+    private $pictureUrl;
+
 
 
     /**
@@ -132,22 +153,22 @@ class Phone
     }
 
     /**
-     * Get picture
+     * Get pictureUrl
      *
      * @return string
      */
-    public function getPicture()
+    public function getPictureUrl()
     {
-        return $this->picture;
+        return $this->pictureUrl;
     }
 
     /**
-     * Set picture
+     * Set pictureUrl
      *
-     * @param string $picture
+     * @param string $pictureUrl
      */
-    public function setPicture($picture)
+    public function setPictureUrl($pictureUrl)
     {
-        $this->picture = $picture;
+        $this->pictureUrl = $pictureUrl;
     }
 }
