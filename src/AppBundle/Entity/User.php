@@ -5,6 +5,7 @@ namespace AppBundle\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Hateoas\Configuration\Annotation as Hateoas;
 use JMS\Serializer\Annotation as Serializer;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
@@ -22,7 +23,7 @@ use Symfony\Component\Validator\Constraints as Assert;
  *     )
  * )
  */
-class User
+class User implements UserInterface
 {
 
     /**
@@ -32,7 +33,7 @@ class User
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
      *
-     * @Serializer\Groups({"details"})
+     * @Serializer\Groups({"details", "create"})
      *
      * @Serializer\Since("1.0")
      */
@@ -43,7 +44,7 @@ class User
      *
      * @ORM\Column(name="name", type="string", length=255)
      *
-     * @Serializer\Groups({"details", "list"})
+     * @Serializer\Groups({"details", "list", "create"})
      *
      * @Assert\NotBlank(
      *     groups={"create"}
@@ -73,7 +74,7 @@ class User
      *
      * @ORM\Column(name="mail", type="string", length=255, unique=true)
      *
-     * @Serializer\Groups({"details", "list"})
+     * @Serializer\Groups({"details", "list", "create"})
      *
      * @Assert\NotBlank(
      *     groups={"create"}
@@ -156,4 +157,23 @@ class User
     {
         $this->mail = $mail;
     }
+
+    public function getUsername()
+    {
+        return $this->mail;
+    }
+
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function getSalt()
+    {
+    }
+
+    public function eraseCredentials()
+    {
+    }
+
 }

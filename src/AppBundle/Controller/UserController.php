@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Service\ClientManager;
 use AppBundle\Service\ExceptionManagement;
 use AppBundle\Service\Representation\Users;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -10,8 +11,6 @@ use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Validator\ConstraintViolationList;
 
 class UserController extends FOSRestController
@@ -54,7 +53,7 @@ class UserController extends FOSRestController
     /**
      * @Rest\Get(
      *     path="/users",
-     *     name="user_list"
+     *     name="users_list"
      * )
      * @Rest\QueryParam(
      *     name="limit",
@@ -113,7 +112,8 @@ class UserController extends FOSRestController
      *     name="user_create"
      * )
      * @Rest\View(
-     *     statusCode=201
+     *     statusCode=201,
+     *     serializerGroups={"create", "Default"}
      * )
      * @ParamConverter(
      *     "user",
@@ -159,22 +159,15 @@ class UserController extends FOSRestController
 
         $user->setPassword($this->get('security.password_encoder')->encodePassword($user, $user->getPassword()));
 
-        $client = $this
-            ->get('app_bundle.client_manager')
-            ->createClient($this->getParameter('redirect_uri'));
+        $em = $this->getDoctrine()->getManager();
+        $em->persist($user);
+        $em->flush();
 
-        $authCode = $this
-            ->get('app_bundle.authorization_code_manager')
-            ->getAuthorizationCode($client, $user, $request, $this->getParameter('redirect_uri'));
-
-        $accessToken = $this
-            ->get('app_bundle.access_token_manager')
-            ->getTokenAccess($authCode, $request, $client, $this->getParameter('redirect_uri'));
+        $client = $this->get(ClientManager::class)->createClient($this->getParameter('redirect_uri'));
 
         return [
-            'data' => $user,
-            '_links' => $this->generateUrl('user_show', ['id' => $user->getId()]),
-            '_embedded' => $accessToken
+            'user' => $user,
+            '_embedded' => ['client' => $client, 'public_id' => $client->getPublicId()]
         ];
     }
 }

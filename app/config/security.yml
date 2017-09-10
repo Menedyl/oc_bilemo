@@ -9,7 +9,7 @@ security:
     # https://symfony.com/doc/current/security.html#b-configuring-how-users-are-loaded
     providers:
         user_provider:
-            id: app_bundle.user_provider
+            id: AppBundle\Security\UserProvider
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -28,12 +28,8 @@ security:
 
         oauth_token:
             pattern:    ^/oauth/v2/token
-            security:   false
-
-        oauth_authorize:
-            pattern:    ^/oauth/v2/auth
             simple_preauth:
-                authenticator: app_bundle.user_authenticator
+                authenticator: AppBundle\Security\UserAuthenticator
             provider: user_provider
 
         api:

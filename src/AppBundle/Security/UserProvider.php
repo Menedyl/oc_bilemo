@@ -3,7 +3,7 @@
 namespace AppBundle\Security;
 
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 use JMS\Serializer\Serializer;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\User\UserInterface;
@@ -11,19 +11,18 @@ use Symfony\Component\Security\Core\User\UserProviderInterface;
 
 class UserProvider implements UserProviderInterface
 {
-    private $em;
+    private $userRepo;
 
 
-    public function __construct(EntityManager $entityManager, Serializer $serializer)
+    public function __construct(EntityRepository $userRepo, Serializer $serializer)
     {
-        $this->em = $entityManager;
+        $this->userRepo = $userRepo;
         $this->serializer = $serializer;
     }
 
     public function loadUserByUsername($username)
     {
-
-        $user = $this->em->getRepository("AppBundle:User")->findOneBy(['mail' => $username]);
+        $user = $this->userRepo->findOneBy(['mail' => $username]);
 
         if (!$user) {
             throw new \LogicException('Did not managed to get your user.');

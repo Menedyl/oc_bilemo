@@ -1,6 +1,6 @@
 rest:
     resource: '@AppBundle/Controller/'
-    type:
+    type:     annotation
 
 NelmioApiDoc:
     resource: '@NelmioApiDocBundle/Resources/config/routing.yml'

@@ -19,10 +19,11 @@ class ClientManager
         $client = $this->clientManager->createClient();
 
         $client->setRedirectUris([$redirectUri]);
-        $client->setAllowedGrantTypes(['token', 'authorization_code']);
+        $client->setAllowedGrantTypes(['token', 'refresh_token', 'password']);
 
         $this->clientManager->updateClient($client);
 
         return $client;
     }
+
 }

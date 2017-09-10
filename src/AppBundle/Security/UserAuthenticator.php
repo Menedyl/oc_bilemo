@@ -16,7 +16,7 @@ class UserAuthenticator implements SimplePreAuthenticatorInterface, Authenticati
 
     public function createToken(Request $request, $providerKey)
     {
-        $accessToken = $request->query->get('username');
+        $accessToken = $request->request->get('username');
 
         return new PreAuthenticatedToken(
             'anon.',
@@ -35,7 +35,7 @@ class UserAuthenticator implements SimplePreAuthenticatorInterface, Authenticati
             $user,
             $accessToken,
             $providerKey,
-            $user->getRoles()
+            ['ROLE_USER']
         );
     }
 
