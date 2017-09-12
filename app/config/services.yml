@@ -43,9 +43,23 @@ services:
     AppBundle\Service\Representation\Phones:
         public: true
         arguments:
-            $em: '@Doctrine\ORM\EntityManagerInterface'
+            $customRepository: '@app_bundle.phone_repository'
+            $serializer: '@jms_serializer'
 
     AppBundle\Service\Representation\Users:
         public: true
         arguments:
-            $em: '@Doctrine\ORM\EntityManagerInterface'
+            $customRepository: '@app_bundle.user_repository'
+            $serializer: '@jms_serializer'
+
+    app_bundle.phone_repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments:
+            - AppBundle\entity\Phone
+
+    app_bundle.user_repository:
+        class: Doctrine\ORM\EntityRepository
+        factory: ['@doctrine.orm.default_entity_manager', getRepository]
+        arguments:
+            - AppBundle\entity\User

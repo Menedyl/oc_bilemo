@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\User;
+use AppBundle\Service\ExceptionManagement;
+use AppBundle\Service\Representation\Users;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Request\ParamFetcherInterface;
@@ -100,7 +102,7 @@ class UserController extends FOSRestController
             $paramFetcher->get('keyword')
         );
 
-        return $this->get('AppBundle\Service\Representation\Users')->paginate($users, $paramFetcher);
+        return $this->get(Users::class)->paginate($users, $paramFetcher);
     }
 
 
@@ -151,7 +153,7 @@ class UserController extends FOSRestController
     public function createAction(User $user, ConstraintViolationList $violations)
     {
         if (count($violations)) {
-            $this->get('AppBundle\Service\ExceptionManagement')->resourceValidationException($violations);
+            $this->get(ExceptionManagement::class)->resourceValidationException($violations);
         }
 
         $em = $this->getDoctrine()->getManager();

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\Phone;
+use AppBundle\Service\Representation\Phones;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Request\ParamFetcherInterface;
 use Nelmio\ApiDocBundle\Annotation\ApiDoc;
@@ -96,6 +97,6 @@ class PhoneController extends Controller
             $paramFetcher->get('keyword')
         );
 
-        return $this->get('AppBundle\Service\Representation\Phones')->pagination($phones, $paramFetcher);
+        return $this->get(Phones::class)->pagination($phones, $paramFetcher);
     }
 }
