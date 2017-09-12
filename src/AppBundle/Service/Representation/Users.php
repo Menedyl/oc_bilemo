@@ -34,7 +34,7 @@ class Users extends AbstractRepresentation
                 $totalUsers
             );
 
-        return $this->makeLayout($representationUsers, self::TYPE);
+        return $representationUsers;
     }
 
 

@@ -32,7 +32,7 @@ class Phones extends AbstractRepresentation
                 $totalPhones
             );
 
-        return $this->makeLayout($representationPhones, self::TYPE);
+        return $representationPhones;
     }
 
 }

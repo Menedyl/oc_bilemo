@@ -56,10 +56,22 @@ services:
         class: Doctrine\ORM\EntityRepository
         factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments:
-            - AppBundle\entity\Phone
+            - AppBundle\Entity\Phone
 
     app_bundle.user_repository:
         class: Doctrine\ORM\EntityRepository
         factory: ['@doctrine.orm.default_entity_manager', getRepository]
         arguments:
-            - AppBundle\entity\User
+            - AppBundle\Entity\User
+
+    AppBundle\Security\UserAuthenticator:
+
+    AppBundle\Security\UserProvider:
+        arguments:
+            $userRepo: '@app_bundle.user_repository'
+            $serializer: '@jms_serializer'
+
+    AppBundle\Service\ClientManager:
+        arguments:
+            $clientManager: '@fos_oauth_server.client_manager.default'
+        public: true
