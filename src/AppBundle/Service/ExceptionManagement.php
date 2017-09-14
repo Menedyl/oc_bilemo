@@ -9,7 +9,6 @@ class ExceptionManagement
 {
     public function resourceValidationException(ConstraintViolationList $violationList)
     {
-
         $message = 'The JSON sent contains invalid data. ';
 
         foreach ($violationList as $violation) {
@@ -17,6 +16,5 @@ class ExceptionManagement
         }
 
         throw new ResourceValidationException($message);
-
     }
 }

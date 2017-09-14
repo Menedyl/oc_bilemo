@@ -167,7 +167,12 @@ class UserController extends FOSRestController
 
         return [
             'user' => $user,
-            '_embedded' => ['client' => $client, 'public_id' => $client->getPublicId()]
+            '_embedded' => [
+                'client' => [
+                    'client_id' => $client->getPublicId(),
+                    'client_secret' => $client->getSecret()
+                ]
+            ]
         ];
     }
 }
