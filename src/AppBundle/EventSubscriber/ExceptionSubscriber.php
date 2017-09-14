@@ -37,7 +37,11 @@ class ExceptionSubscriber implements EventSubscriberInterface
 
         } elseif ($event->getException() instanceof UniqueConstraintViolationException) {
 
-            $message = $event->getException()->getPrevious()->getMessage();
+            $messageException = $event->getException()->getPrevious()->getMessage();
+
+            $array = explode('\'', $messageException);
+
+            $message = "The field '" . $array[1] . "'' already exists.";
 
             throw new ResourceUniqueConstraintValidationException($message, 409);
         }
