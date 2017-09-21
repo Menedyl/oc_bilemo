@@ -29,6 +29,6 @@ To view resources, the user must register and use an access token:
                 Authorization: Bearer youraccesstoken
                 Content-Type: application/json
                 
-For more information about the resources you can find on the URI "/ api / doc".
+For more information about the resources you can find on the URI "/api/doc".
                 
 
