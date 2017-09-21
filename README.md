@@ -5,7 +5,7 @@ Projet 7 du parcour "Développeur d'application-php/symfony" d'OpenClassroom.
 
 Retrieve the project by cloning the directory into your web folder.
 Use the "composer install" command to install the project.
-Change the "app / config / parameter.yml" file with the information in your database.
+Change the "app/config/parameter.yml" file with the information in your database.
 
 <h3>Utilization</h3>
 
