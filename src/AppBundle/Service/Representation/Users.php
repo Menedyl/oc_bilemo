@@ -37,5 +37,4 @@ class Users extends AbstractRepresentation
         return $representationUsers;
     }
 
-
 }
