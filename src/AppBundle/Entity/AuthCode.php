@@ -4,7 +4,6 @@ namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 Use FOS\OAuthServerBundle\Entity\AuthCode as BaseAuthCode;
-use FOS\OAuthServerBundle\Model\Client;
 
 /**
  * Class AuthCode
